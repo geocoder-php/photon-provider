@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Geocoder\Provider\Photon\Tests;
 
 use Geocoder\IntegrationTest\BaseTestCase;
+use Geocoder\Model\Country;
 use Geocoder\Provider\Photon\Model\PhotonAddress;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
@@ -69,7 +70,9 @@ class PhotonTest extends BaseTestCase
         $this->assertEquals('Avenue Gambetta', $result->getStreetName());
         $this->assertEquals('75020', $result->getPostalCode());
         $this->assertEquals('Paris', $result->getLocality());
-        $this->assertEquals('France', $result->getCountry());
+        $this->assertInstanceOf(Country::class, $result->getCountry());
+        $this->assertEquals('France', $result->getCountry()->getName());
+        $this->assertEquals('FR', $result->getCountry()->getCode());
 
         $this->assertEquals(1988097192, $result->getOSMId());
         $this->assertEquals('N', $result->getOSMType());
