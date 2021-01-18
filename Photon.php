@@ -139,9 +139,15 @@ final class Photon extends AbstractHttpProvider implements Provider
 
         $builder->setStreetName($properties->street ?? null);
         $builder->setStreetNumber($properties->housenumber ?? null);
+        // If no street name was provided in the result but the type of the result is a street,
+        // use the "name" as the street name.
+        if (empty($properties->street) && !empty($properties->type) && $properties->type === 'street') {
+            $builder->setStreetName($properties->name ?? null);
+        }
         $builder->setPostalCode($properties->postcode ?? null);
         $builder->setLocality($properties->city ?? null);
         $builder->setCountry($properties->country ?? null);
+        $builder->setCountryCode($properties->countrycode ?? null);
 
         if (isset($properties->extent)) {
             $builder->setBounds($properties->extent[0], $properties->extent[2], $properties->extent[1], $properties->extent[3]);
