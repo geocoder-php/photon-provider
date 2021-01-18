@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Geocoder\Provider\Photon\Tests;
 
 use Geocoder\IntegrationTest\BaseTestCase;
+use Geocoder\Provider\Photon\Model\PhotonAddress;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
 use Geocoder\Provider\Photon\Photon;
@@ -88,6 +89,20 @@ class PhotonTest extends BaseTestCase
         $result = $results->first();
 
         $this->assertEquals('The Sherlock Holmes Museum and shop', $result->getName());
+    }
+
+    public function testGeocodeQueryWithStreetNameResult()
+    {
+        $provider = Photon::withKomootServer($this->getHttpClient());
+        $results = $provider->geocodeQuery(GeocodeQuery::create('Dickens Avenue, Canterbury, England'));
+
+        $this->assertInstanceOf('Geocoder\Model\AddressCollection', $results);
+
+        /** @var PhotonAddress $result */
+        $result = $results->first();
+
+        $this->assertEquals('Dickens Avenue', $result->getName());
+        $this->assertEquals('Dickens Avenue', $result->getStreetName());
     }
 
     public function testReverseQuery()
