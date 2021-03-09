@@ -143,7 +143,7 @@ final class Photon extends AbstractHttpProvider implements Provider
         $builder->setLocality($properties->city ?? null);
         // If no city name was provided in the result but the type of the result is a city,
         // use the "name" as the city name.
-        if (!isset($properties->city) && !empty($properties->type) && $properties->type === 'city') {
+        if (empty($properties->city) && !empty($properties->type) && $properties->type === 'city') {
             $builder->setLocality($properties->name ?? null);
         }
         $builder->setCountry($properties->country ?? null);
