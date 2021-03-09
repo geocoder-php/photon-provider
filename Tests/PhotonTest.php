@@ -90,6 +90,20 @@ class PhotonTest extends BaseTestCase
         $this->assertEquals('The Sherlock Holmes Museum and shop', $result->getName());
     }
 
+    public function testGeocodeQueryWithCityTypeResult()
+    {
+        $provider = Photon::withKomootServer($this->getHttpClient());
+        $results = $provider->geocodeQuery(GeocodeQuery::create('London, England'));
+
+        $this->assertInstanceOf('Geocoder\Model\AddressCollection', $results);
+
+        /** @var \Geocoder\Provider\Photon\Model\PhotonAddress $result */
+        $result = $results->first();
+
+        $this->assertEquals('London', $result->getLocality());
+        $this->assertEquals('London', $result->getName());
+    }
+
     public function testReverseQuery()
     {
         $provider = Photon::withKomootServer($this->getHttpClient());
